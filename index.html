@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AI App</title>
+    <style>
+        /* Modern app design layout */
+        body { font-family: Arial, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .app-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        button { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .cash-btn { background: #00d632; color: white; }
+        .paypal-btn { background: #0070ba; color: white; }
+        #ai-output { background: #eee; padding: 10px; border-radius: 6px; margin-top: 15px; text-align: left; min-height: 50px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-box">
+        <h2>My AI & Payment App</h2>
+        <p>Your interactive application layout:</p>
+        
+        <!-- AI Response Window -->
+        <div id="ai-output">AI is loading...</div>
+
+        <!-- CASH APP BUTTON -->
+        <a href="https://cash.app" target="_blank">
+            <button class="cash-btn">Pay with Cash App</button>
+        </a>
+
+        <!-- PAYPAL BUTTON -->
+        <button class="paypal-btn" onclick="alert('PayPal integration active!')">Pay with PayPal</button>
+    </div>
+
+    <!-- Script to load Google's web AI library securely -->
+    <script type="module">
+        import { GoogleGenAI } from 'https://esm.run';
+
+        // NOTE: We will supply the API Key securely through Vercel later 
+        const ai = new GoogleGenAI({});
+
+        const tools = [{ type: 'google_search' }];
+        const generationConfig = {
+            temperature: 1,
+            max_output_tokens: 65536,
+            topP: 0.95,
+            thinkingLevel: 'high',
+        };
+
+        async function main() {
+            try {
+                const interaction = await ai.interactions.create({
+                    model: 'models/gemini-3-flash-preview',
+                    input: 'Hello! Introduce yourself briefly.',
+                    tools: tools,
+                    generation_config: generationConfig,
+                });
+                
+                // Display the AI response inside your text box
+                const outputText = interaction.steps?.at(-1)?.model_output?.text || "Hello from Gemini!";
+                document.getElementById('ai-output').innerText = outputText;
+            } catch (error) {
+                document.getElementById('ai-output').innerText = "App running! Connect your API key in Vercel to activate AI features.";
+                console.error(error);
+            }
+        }
+
+        main();
+    </script>
+
+</body>
+</html>
