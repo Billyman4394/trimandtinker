@@ -3,70 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My AI App</title>
+    <title>Google AI Studio App</title>
     <style>
-        /* Modern app design layout */
-        body { font-family: Arial, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .app-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; text-align: center; }
-        button { width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        /* Google AI Studio Theme Styling */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #131314; color: #e3e3e3; margin: 0; padding: 0; display: flex; flex-direction: column; height: 100vh; }
+        .header { background: #1e1f20; padding: 15px 20px; border-bottom: 1px solid #444746; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { margin: 0; font-size: 18px; font-weight: 500; color: #fff; }
+        .payment-box { display: flex; gap: 10px; }
+        .pay-btn { padding: 8px 16px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; }
         .cash-btn { background: #00d632; color: white; }
         .paypal-btn { background: #0070ba; color: white; }
-        #ai-output { background: #eee; padding: 10px; border-radius: 6px; margin-top: 15px; text-align: left; min-height: 50px; font-size: 14px; }
+        
+        .chat-container { flex: 1; display: flex; flex-direction: column; max-width: 800px; width: 100%; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+        .chat-box { flex: 1; overflow-y: auto; background: #1e1f20; border-radius: 12px; border: 1px solid #444746; padding: 20px; margin-bottom: 20px; }
+        .ai-bubble { background: #282a2c; padding: 12px 16px; border-radius: 8px; border-left: 4px solid #a8c7fa; margin-bottom: 15px; line-height: 1.5; }
+        
+        .input-area { display: flex; gap: 10px; background: #1e1f20; border: 1px solid #444746; border-radius: 28px; padding: 8px 16px; align-items: center; }
+        .input-area input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 15px; }
+        .send-btn { background: #a8c7fa; color: #042e60; border: none; border-radius: 50%; width: 40px; height: 40px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
 
-    <div class="app-box">
-        <h2>My AI & Payment App</h2>
-        <p>Your interactive application layout:</p>
-        
-        <!-- AI Response Window -->
-        <div id="ai-output">AI is loading...</div>
-
-        <!-- CASH APP BUTTON -->
-        <a href="https://cash.app" target="_blank">
-            <button class="cash-btn">Pay with Cash App</button>
-        </a>
-
-        <!-- PAYPAL BUTTON -->
-        <button class="paypal-btn" onclick="alert('PayPal integration active!')">Pay with PayPal</button>
+    <!-- Top Navigation Header -->
+    <div class="header">
+        <h1>Gemini AI Studio Workspace</h1>
+        <div class="payment-box">
+            <!-- Cash App Links -->
+            <a href="https://cash.app" target="_blank" class="pay-btn cash-btn">Cash App</a>
+            <!-- PayPal Button Dummy -->
+            <a href="#" class="pay-btn paypal-btn" onclick="alert('PayPal Connected!')">PayPal</a>
+        </div>
     </div>
 
-    <!-- Script to load Google's web AI library securely -->
-    <script type="module">
-        import { GoogleGenAI } from 'https://esm.run';
+    <!-- Main Workspace Chat Panel -->
+    <div class="chat-container">
+        <div class="chat-box" id="chat-window">
+            <div class="ai-bubble" id="ai-output">
+                <strong>System:</strong> Welcome to your AI Studio application. Your UI layout is active! Connect your Gemini API Key in your host settings to talk to the model.
+            </div>
+        </div>
 
-        // NOTE: We will supply the API Key securely through Vercel later 
-        const ai = new GoogleGenAI({});
-
-        const tools = [{ type: 'google_search' }];
-        const generationConfig = {
-            temperature: 1,
-            max_output_tokens: 65536,
-            topP: 0.95,
-            thinkingLevel: 'high',
-        };
-
-        async function main() {
-            try {
-                const interaction = await ai.interactions.create({
-                    model: 'models/gemini-3-flash-preview',
-                    input: 'Hello! Introduce yourself briefly.',
-                    tools: tools,
-                    generation_config: generationConfig,
-                });
-                
-                // Display the AI response inside your text box
-                const outputText = interaction.steps?.at(-1)?.model_output?.text || "Hello from Gemini!";
-                document.getElementById('ai-output').innerText = outputText;
-            } catch (error) {
-                document.getElementById('ai-output').innerText = "App running! Connect your API key in Vercel to activate AI features.";
-                console.error(error);
-            }
-        }
-
-        main();
-    </script>
+        <!-- User Prompt Bar -->
+        <div class="input-area">
+            <input type="text" placeholder="Type your prompt here like in AI Studio...">
+            <button class="send-btn">➔</button>
+        </div>
+    </div>
 
 </body>
 </html>
